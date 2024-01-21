@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head lang="es">
+
+<style type="text/css">
+
+@font-face {
+  font-family: undertale;
+  src: url('fonts/undertale.ttf') format('truetype');
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #115;
+  background-image: url("img/fondo1.jpg");
+  background-size: cover; /* La imagen se ajusta para cubrir toda el área del body */
+  background-repeat: no-repeat;
+  font-family: consolas;
+  margin: auto;
+  padding: 1;
+}
+
+input{
+  border:2px solid #000;
+
+  border-radius: 2px;
+}
+input:hover{
+  border:2px solid #f00;
+
+  border-radius: 2px;
+}
+
+div{
+	display:flex;
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+  background-color: #ff00;
+  transition: 200ms;
+  border-radius: 2px;
+
+  width: 50vw;
+  height:70vh;
+}
+.table:hover{
+  background-color: #ff02;
+}
+
+#comunity-cards {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+  padding: 20px;
+}
+
+.hand {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  margin: 10px 0;
+}
+
+.card {
+  width: 80px;
+  height: 120px;
+  background-color: #ccc;
+  border: 1px solid #888;
+  margin: 0 5px;
+  border:2px solid #000;
+
+  border-radius: 2px;
+}
+.card:hover{
+  border:2px solid #f00;
+
+  border-radius: 2px;
+}
+
+.money {
+	color: #f77;
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+#dinero{
+	color: #7f7;
+	float:left;
+}
+#bote{
+	color: #7f7;
+	float:left;
+}
+	
+</style>
+
+	<meta charset="utf-8">
+	<title>POKER</title>
+
+</head>
+<body>
+
+<div class="table">
+	<div class="money" id="bote">bote: 0€</div>
+	<div class="money" id="deuda">bote: 0€</div>
+	<div id="community-cards">
+		<img id="carta1" class="card"></img>
+		<img id="carta2" class="card"></img>
+		<img id="carta3" class="card"></img>
+		<img id="carta4" class="card"></img>
+		<img id="carta5" class="card"></img>
+	</div>
+	<div class="hand">
+		<img id="carta6" class="card"></img>
+		<img id="carta7" class="card"></img>
+	</div>
+	<div class="opciones">
+		<div class="money" id="dinero">10002€</div>
+		<input type="submit" value="avandonar" class="button" id="avandonar" style="background:#00b8;color:#fff;"></button>
+		<input type="submit" value="plantar" class="button" id="plantar" style="background:#0b08;color:#fff;"></button>
+		<input type="submit" value="subir" class="button" id="subir" style="background:#b008;color:#fff;"></button>
+		<input class="button" type="number" style="background:#f008;" id="subir-slider">
+	</div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+//sonido
+
+let butons = [];
+butons = document.getElementsByClassName("button");
+
+for(let i = 0;i < butons.length;i++){
+	butons[i].addEventListener('mouseenter', function(e){
+		let efecto = new Audio("sonido/boton.mp3");
+		efecto.volume = 0.2;
+		efecto.play();
+	});
+	butons[i].addEventListener('click', function(e){
+		let efecto = new Audio("sonido/boton.mp3");
+		efecto.volume = 1;
+		efecto.play();
+	});
+}
+
+let cts = [];
+cts = document.getElementsByClassName("card");
+
+for(let i = 0;i < cts.length;i++){
+	cts[i].addEventListener('mouseenter', function(e){
+		let efecto = new Audio("sonido/boton.mp3");
+		efecto.volume = 0.2;
+		efecto.play();
+	});
+	cts[i].addEventListener('click', function(e){
+		let efecto = new Audio("sonido/boton.mp3");
+		efecto.volume = 1;
+		efecto.play();
+	});
+}
+
+</script>
+
+<script src="scripts/Carta.js"></script>
+<script src="scripts/cartas.js"></script>
+<script src="scripts/mazo.js"></script>
+<script src="scripts/mano.js"></script>
+<script src="scripts/Jugador.js"></script>
+<script src="scripts/jugadores.js"></script>
+<script src="scripts/puntos.js"></script>
+<script src="scripts/partida.js"></script>
+
+<script type="text/javascript">
+//controler
+
+puntuar();
+
+setInterval(() => {
+	for(let i = 1;i <= mano.length;i++){
+		if(turno == 0){
+			document.querySelector(`#carta${i}`).src = `img/cartas/nulo.jpg`;
+		}
+		if(turno == 1){
+			if(i < 4){
+				document.querySelector(`#carta${i}`).src = `img/cartas/${cartas[mano[i-1]].name}.png`;
+			} else {
+				document.querySelector(`#carta${i}`).src = `img/cartas/nulo.jpg`;
+			}
+		}
+		if(turno == 2){
+			if(i < 5){
+				document.querySelector(`#carta${i}`).src = `img/cartas/${cartas[mano[i-1]].name}.png`;
+			} else {
+				document.querySelector(`#carta${i}`).src = `img/cartas/nulo.jpg`;
+			}
+		}
+		if(turno == 3){
+			document.querySelector(`#carta${i}`).src = `img/cartas/${cartas[mano[i-1]].name}.png`;
+		}
+	}
+	for(let i = 1;i <= jugadores[0].cartas.length;i++){
+		document.querySelector(`#carta${i+5}`).src = `img/cartas/${cartas[jugadores[0].cartas[i-1]].name}.png`;
+	}
+
+	document.querySelector("#dinero").innerHTML = jugadores[0].dinero+"€";
+	document.querySelector("#bote").innerHTML = bote+"€";
+	document.querySelector("#deuda").innerHTML = "-"+deuda+"€";
+
+	if(turno >= 4){
+		deuda = 0;
+
+		if(bote > 0){
+			let vale = true;
+			let jugada = [];
+
+			for(let i = 0;i < jugadores.length;i++){
+				if(jugadores[0].puntos >= jugadores[i].puntos && vale){
+					vale = true;
+				} else {
+					if(jugada.length < 1){
+						console.log(jugadores[i].cartas)
+						jugada = jugadores[i].cartas;
+					}
+					vale = false
+				}
+			}
+			if(vale){
+				window.alert("has ganado");
+				jugadores[0].dinero += bote;
+				bote = 0;
+			} else {
+				window.alert("has perdido contra un "+cartas[jugada[0]].name+" y un "+cartas[jugada[1]].name);
+				bote = 0;
+			}
+		}
+	}
+
+	if(document.querySelector("#subir-slider").value < 0)
+		document.querySelector("#subir-slider").value = 0;
+},10);
+
+document.querySelector("#avandonar").addEventListener("click",() => {
+	mazo = [];
+	for(let carta = 0;carta < cartas.length;carta++){
+		let id = Math.floor(Math.random()*cartas.length);
+
+		while(mazo.includes(id)){
+			id = Math.floor(Math.random()*cartas.length);
+		}
+
+		mazo[carta] = id;
+	}
+	for(let i = 0;i < 5;i++){
+		mano[i] = mazo[i+5*2-1];
+	}
+	for(let jugador = 0;jugador < jugadores.length;jugador++){
+		jugadores[jugador].cartas[0] = mazo[jugador*2];
+		jugadores[jugador].cartas[1] = mazo[jugador*2+1];
+
+		jugadores[jugador].mano = [
+			jugadores[jugador].cartas[0],jugadores[jugador].cartas[1],
+			mano[0],mano[1],mano[2],mano[3],mano[4]
+		];
+	}
+	deuda = 100;
+	bote = 500;
+	turno = 0;
+	puntuar();
+});
+document.querySelector("#plantar").addEventListener("click",() => {
+	turno += 1;
+	bote += deuda*5;
+	jugadores[0].dinero -= deuda;
+});
+document.querySelector("#subir").addEventListener("click",() => {
+	deuda -= -(document.querySelector("#subir-slider").value);
+});
+
+</script>
+
+</html>
