@@ -1,4 +1,4 @@
-#POKER
+# POKER
 
 Super fanci minimal fun poker game.
 ![gameplay](foto1.png)
